@@ -28,11 +28,11 @@ public class FileController {
     private FileRepository fileRepository;
 
     @PostMapping("/upload")
-    public ResponseEntity<FileModel> saveFile(@RequestParam("file")MultipartFile file){
+    public ResponseEntity<FileModel> saveFile(@RequestParam("file") MultipartFile file) {
         try {
             FileModel savedFile = fileService.saveFile(file);
             return new ResponseEntity<>(savedFile, HttpStatus.CREATED);
-        } catch (IOException e){
+        } catch (IOException e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -40,10 +40,10 @@ public class FileController {
     @GetMapping("/{id}")
     public ResponseEntity<byte[]> downloadFile(@PathVariable Long id) {
         Optional<FileModel> file = fileRepository.findById(id);
-        if (file.isPresent()){
+        if (file.isPresent()) {
             HttpHeaders headers = new HttpHeaders();
             headers.setContentType(MediaType.parseMediaType(file.get().getContentType()));
-            return new ResponseEntity<>(file.get().getData(), headers,HttpStatus.OK);
+            return new ResponseEntity<>(file.get().getData(), headers, HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
